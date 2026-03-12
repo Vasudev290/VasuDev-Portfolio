@@ -21,6 +21,8 @@
   letter-spacing: 7px;
   font-weight: 400;
   color: var(--accentColor);
+  margin-bottom: 20px;
+  opacity: 1;
 }
 
 .about-me p {
@@ -28,6 +30,8 @@
   font-weight: 600;
   line-height: 36px;
   letter-spacing: 1px;
+  color: #eae5ec;
+  opacity: 1;
 }
 
 @media only screen and (min-width: 600px) {

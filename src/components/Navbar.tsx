@@ -6,11 +6,11 @@ import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import "./styles/Navbar.css";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+import { smoother, setSmoother } from "./utils/smoother";
 
 const Navbar = () => {
   useEffect(() => {
-    smoother = ScrollSmoother.create({
+    const s = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
       smooth: 1.7,
@@ -19,26 +19,31 @@ const Navbar = () => {
       autoResize: true,
       ignoreMobileResize: true,
     });
+    setSmoother(s);
 
-    smoother.scrollTop(0);
-    smoother.paused(true);
+    s.scrollTop(0);
+    s.paused(true);
 
     const links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
       const element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
-        if (window.innerWidth > 1024) {
-          e.preventDefault();
-          const elem = e.currentTarget as HTMLAnchorElement;
-          const section = elem.getAttribute("data-href");
-          if (section) {
+        const elem = e.currentTarget as HTMLAnchorElement;
+        const section = elem.getAttribute("data-href");
+        if (section) {
+          if (window.innerWidth > 1024 && smoother) {
+            e.preventDefault();
             smoother.scrollTo(section, true, "top top");
+          } else {
+            // Mobile or smaller screens
+            // Let the default href work, but maybe handle smoother if needed
           }
         }
       });
     });
     window.addEventListener("resize", () => {
       ScrollSmoother.refresh(true);
+      ScrollTrigger.refresh();
     });
   }, []);
   return (

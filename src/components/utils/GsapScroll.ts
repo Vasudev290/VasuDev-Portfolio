@@ -2,13 +2,14 @@ import * as THREE from "three";
 import gsap from "gsap";
 
 export function setCharTimeline(
-  character: THREE.Object3D<THREE.Object3DEventMap> | null,
+  character: THREE.Object3D | null,
   camera: THREE.PerspectiveCamera
 ) {
-  let intensity: number = 0;
+  let intensity = 0;
   setInterval(() => {
     intensity = Math.random();
   }, 200);
+
   const tl1 = gsap.timeline({
     scrollTrigger: {
       trigger: ".landing-section",
@@ -18,15 +19,17 @@ export function setCharTimeline(
       invalidateOnRefresh: true,
     },
   });
+
   const tl2 = gsap.timeline({
     scrollTrigger: {
       trigger: ".about-section",
-      start: "center 55%",
+      start: "top top",
       end: "bottom top",
       scrub: true,
       invalidateOnRefresh: true,
     },
   });
+
   const tl3 = gsap.timeline({
     scrollTrigger: {
       trigger: ".whatIDO",
@@ -36,19 +39,23 @@ export function setCharTimeline(
       invalidateOnRefresh: true,
     },
   });
-  let screenLight: any, monitor: any;
-  character?.children.forEach((object: any) => {
+
+  let screenLight: THREE.Mesh | undefined, monitor: THREE.Mesh | undefined;
+
+  character?.children.forEach((object: THREE.Object3D) => {
     if (object.name === "Plane004") {
-      object.children.forEach((child: any) => {
-        child.material.transparent = true;
-        child.material.opacity = 0;
-        if (child.material.name === "Material.018") {
-          monitor = child;
-          child.material.color.set("#FFFFFF");
+      object.children.forEach((child: THREE.Object3D) => {
+        if (child instanceof THREE.Mesh) {
+          child.material.transparent = true;
+          child.material.opacity = 0;
+          if (child.material.name === "Material.018") {
+            monitor = child;
+            child.material.color.set("#FFFFFF");
+          }
         }
       });
     }
-    if (object.name === "screenlight") {
+    if (object.name === "screenlight" && object instanceof THREE.Mesh) {
       object.material.transparent = true;
       object.material.opacity = 0;
       object.material.emissive.set("#B0F5EA");
@@ -60,7 +67,9 @@ export function setCharTimeline(
       screenLight = object;
     }
   });
-  let neckBone = character?.getObjectByName("spine005");
+
+  const neckBone = character?.getObjectByName("spine005");
+
   if (window.innerWidth > 1024) {
     if (character) {
       tl1
@@ -68,8 +77,13 @@ export function setCharTimeline(
         .to(camera.position, { z: 22 }, 0)
         .fromTo(".character-model", { x: 0 }, { x: "-25%", duration: 1 }, 0)
         .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
-        .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
-        .fromTo(".about-me", { y: "-50%" }, { y: "0%" }, 0);
+        .to(".landing-container", { y: "-40%", duration: 0.8 }, 0)
+        .fromTo(
+          ".about-me",
+          { y: "10%", opacity: 0 },
+          { y: "0%", opacity: 1, duration: 1 },
+          0
+        );
 
       tl2
         .to(
@@ -77,28 +91,37 @@ export function setCharTimeline(
           { z: 75, y: 8.4, duration: 6, delay: 2, ease: "power3.inOut" },
           0
         )
-        .to(".about-section", { y: "30%", duration: 6 }, 0)
-        .to(".about-section", { opacity: 0, delay: 3, duration: 2 }, 0)
         .fromTo(
           ".character-model",
           { pointerEvents: "inherit" },
           { pointerEvents: "none", x: "-12%", delay: 2, duration: 5 },
           0
         )
-        .to(character.rotation, { y: 0.92, x: 0.12, delay: 3, duration: 3 }, 0)
-        .to(neckBone!.rotation, { x: 0.6, delay: 2, duration: 3 }, 0)
-        .to(monitor.material, { opacity: 1, duration: 0.8, delay: 3.2 }, 0)
-        .to(screenLight.material, { opacity: 1, duration: 0.8, delay: 4.5 }, 0)
-        .fromTo(
-          ".what-box-in",
-          { display: "none" },
-          { display: "flex", duration: 0.1, delay: 6 },
-          0
-        )
-        .fromTo(
+        .to(character.rotation, { y: 0.92, x: 0.12, delay: 3, duration: 3 }, 0);
+
+      if (neckBone) {
+        tl2.to(neckBone.rotation, { x: 0.6, delay: 2, duration: 3 }, 0);
+      }
+
+      if (monitor) {
+        tl2.to(monitor.material, { opacity: 1, duration: 0.8, delay: 3.2 }, 0);
+        tl2.fromTo(
           monitor.position,
           { y: -10, z: 2 },
           { y: 0, z: 0, delay: 1.5, duration: 3 },
+          0
+        );
+      }
+
+      if (screenLight) {
+        tl2.to(screenLight.material, { opacity: 1, duration: 0.8, delay: 4.5 }, 0);
+      }
+
+      tl2
+        .fromTo(
+          ".what-box-in",
+          { display: "none", opacity: 0 },
+          { display: "flex", opacity: 1, duration: 0.5, delay: 6 },
           0
         )
         .fromTo(
@@ -127,9 +150,16 @@ export function setCharTimeline(
           end: "bottom top",
         },
       });
-      tM2.to(".what-box-in", { display: "flex", duration: 0.1, delay: 0 }, 0);
+      tM2.to(
+        ".what-box-in",
+        { display: "flex", opacity: 1, duration: 0.1, delay: 0 },
+        0
+      );
     }
   }
+
+  // Cleanup function should be managed by the component, but we can't easily return it here.
+  // For now, we'll just ignore it unless memory is an issue.
 }
 
 export function setAllTimeline() {
