@@ -124,12 +124,15 @@ export function setCharTimeline(
           { display: "flex", opacity: 1, duration: 0.5, delay: 6 },
           0
         )
-        .fromTo(
-          ".character-rim",
+      const rim = document.querySelector(".character-rim");
+      if (rim) {
+        tl2.fromTo(
+          rim,
           { opacity: 1, scaleX: 1.4 },
           { opacity: 0, scale: 0, y: "-70%", duration: 5, delay: 2 },
           0.3
         );
+      }
 
       tl3
         .fromTo(
@@ -218,4 +221,19 @@ export function setAllTimeline() {
       0
     );
   }
+
+  const techTimeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".techstack",
+      start: "top 80%",
+      end: "bottom top",
+      toggleActions: "play none none reverse",
+    },
+  });
+
+  techTimeline.fromTo(
+    ".techstack h2",
+    { opacity: 0, y: 50 },
+    { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+  );
 }

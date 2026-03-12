@@ -129,26 +129,21 @@ const TechStack = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const threshold = document
-        .getElementById("work")!
-        .getBoundingClientRect().top;
-      setIsActive(scrollY > threshold);
+      const techSection = document.querySelector(".techstack");
+      if (techSection) {
+        const rect = techSection.getBoundingClientRect();
+        // Activate when the top of the section enters the bottom 80% of the viewport
+        setIsActive(rect.top < window.innerHeight * 0.8);
+      }
     };
-    document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
-          handleScroll();
-        }, 10);
-        setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      });
-    });
+    
+    handleScroll(); // Initial check
     window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+    
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, []);
   const materials = useMemo(() => {
@@ -172,10 +167,15 @@ const TechStack = () => {
 
       <Canvas
         shadows
-        gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
-        camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
+        gl={{ alpha: true, stencil: false, depth: true, antialias: true }}
+        camera={{ 
+          position: [0, 0, 20], 
+          fov: window.innerWidth < 768 ? 50 : 32.5, 
+          near: 1, 
+          far: 100 
+        }}
         onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
-        className="tech-canvas"
+        className={`tech-canvas ${isActive ? "canvas-active" : ""}`}
       >
         <ambientLight intensity={1} />
         <spotLight

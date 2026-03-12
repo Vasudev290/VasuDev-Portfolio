@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@dimforge/rapier3d':
+        specifier: ^0.11.2
+        version: 0.11.2
       '@gsap/react':
         specifier: ^2.1.1
         version: 2.1.2(gsap@3.14.2)(react@18.3.1)
@@ -35,9 +38,6 @@ importers:
       gsap:
         specifier: ^3.12.7
         version: 3.14.2
-      gsap-trial:
-        specifier: ^3.12.7
-        version: 3.13.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -182,6 +182,9 @@ packages:
 
   '@dimforge/rapier3d-compat@0.14.0':
     resolution: {integrity: sha512-/uHrUzS+CRQ+NQrrJCEDUkhwHlNsAAexbNXgbN9sHY+GwR+SFFAFrxRr8Llf5/AJZzqiLANdQIfJ63Cw4gJVqw==}
+
+  '@dimforge/rapier3d@0.11.2':
+    resolution: {integrity: sha512-B+AKkPmtJxED3goMTGU8v0ju8hUAUQGLgghzCos4G4OeN9X+mJ5lfN2xtNA0n8tJRJk2YfsMk9BOj/6AN89Acg==}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -1041,10 +1044,6 @@ packages:
   glsl-noise@0.0.0:
     resolution: {integrity: sha512-b/ZCF6amfAUb7dJM/MxRs7AetQEahYzJ8PtgfrmEdtw6uyGOr+ZSGtgjFm6mfsBkxJ4d2W7kg+Nlqzqvn3Bc0w==}
 
-  gsap-trial@3.13.0:
-    resolution: {integrity: sha512-EBaAv7AsgzOIi7E5ny+0YAn0qgz/lX+0B8efrr4su/dhpdihSVHLktoX+RMQj8dNrBJBj/5ASXeUDKx1bEP9aA==}
-    deprecated: This package has been deprecated in favor of the standard 'gsap' package available in the public npmjs repository which now includes all bonus plugins.
-
   gsap@3.14.2:
     resolution: {integrity: sha512-P8/mMxVLU7o4+55+1TCnQrPmgjPKnwkzkXOK1asnR9Jg2lna4tEY5qBJjMmAaOBDDZWtlRjBXjLa0w53G/uBLA==}
 
@@ -1649,6 +1648,8 @@ snapshots:
       '@babel/helper-validator-identifier': 7.28.5
 
   '@dimforge/rapier3d-compat@0.14.0': {}
+
+  '@dimforge/rapier3d@0.11.2': {}
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
@@ -2449,8 +2450,6 @@ snapshots:
   globals@15.15.0: {}
 
   glsl-noise@0.0.0: {}
-
-  gsap-trial@3.13.0: {}
 
   gsap@3.14.2: {}
 
